@@ -284,8 +284,8 @@ class MainApplication(tk.Tk):
         self.article_title_button = MyButton(master=self.articles_frame, view='extractor', text="Cont Title",
                                              command=lambda: self.replace_textbox_value(self.articles_textbox, "//*[contains(@class,'title')]/a"))
         self.article_recent_button = MyButton(master=self.articles_frame, view='extractor', text="Recent",
-                                             command=lambda: self.replace_textbox_value(self.articles_textbox,
-                                                                                        "//*[contains(@*,'recent-posts-')]//a"))
+                                             command=lambda: self.append_textbox_values(self.articles_textbox,
+                                                                                        after_value=" | //*[contains(@*,'recent-posts-')]//a"))
 
         # Title Xpath Buttons
         self.copy_title_button = MyButton(master=self.title_frame, view='extractor', text="Copy", command=lambda: self.copy_code(self.title_textbox))
