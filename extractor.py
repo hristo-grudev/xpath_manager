@@ -668,7 +668,7 @@ class MainApplication(tk.Tk):
                 widget.grid_remove()
 
     def window_setup(self):
-        width = 960
+        width = 850
         height = 1080
         starting_height = 0
         if config.side_of_window == "r":
@@ -1063,7 +1063,7 @@ class MainApplication(tk.Tk):
                 webbrowser.get("chrome").open(link)
 
     def open_sitemap_urls_link(self):
-        links = self.get_strip(self.start_urls_textbox).split(',')
+        links = self.get_strip(self.sitemap_textbox).split(',')
         if links:
             for link in links:
                 link = link.strip()
