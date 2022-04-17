@@ -52,12 +52,12 @@ class MainApplication(tk.Tk):
         self.general_style.theme_use('clam')
         self.frame_style.configure('TFrame', background=config.background)
         self.checkbutton_style.configure('TCheckbutton', background=config.background)
-        self.label_style.configure('TLabel', background=config.background, font=(config.label_font, 12))
-        self.label_style.configure('TRadiobutton', background=config.background, font=(config.label_font, 12))
-        self.label_style_bold.configure('Bold.TLabel', background=config.background, font=(config.label_font, 12, 'bold'))
-        self.button_style.configure('TButton', font=(config.button_font, 9), width=10)
+        self.label_style.configure('TLabel', background=config.background, font=(config.label_font, 9))
+        self.label_style.configure('TRadiobutton', background=config.background, font=(config.label_font, 9))
+        self.label_style_bold.configure('Bold.TLabel', background=config.background, font=(config.label_font, 9, 'bold'))
+        self.button_style.configure('TButton', font=(config.button_font, 9), width=8)
         self.button_style_bold.configure('Bold.TButton', font=(config.button_font, 10, 'bold'), width=10)
-        self.text_font = Font(family=config.label_font, size=12)
+        self.text_font = Font(family=config.label_font, size=10)
 
         # Extractor Frames (Order chosen here)
         self.view_menu_frame = MyFrame(master=self, padding=5, view='menu')
@@ -76,6 +76,10 @@ class MainApplication(tk.Tk):
         self.author_frame = MyFrame(master=self, view='extractor')
         self.body_frame = MyFrame(master=self, view='extractor')
         self.body_buttons_frame = MyFrame(self.body_frame, view='extractor')
+        self.sitemap_frame = MyFrame(master=self, view='extractor')
+        self.sitemap_buttons_frame = MyFrame(self.sitemap_frame, view='extractor')
+        self.link_regex_frame = MyFrame(master=self, view='extractor')
+        self.link_regex_buttons_frame = MyFrame(self.link_regex_frame, view='extractor')
         self.bottom_buttons_frame = MyFrame(master=self, view='extractor')
 
         # Finder Frames (Order chosen here)
@@ -102,6 +106,8 @@ class MainApplication(tk.Tk):
         self.pubdate_label = MyLabel(master=self.pubdate_frame, view='extractor', text="Pubdate XPath:")
         self.author_label = MyLabel(master=self.author_frame, view='extractor', text="Author XPath:")
         self.body_label = MyLabel(master=self.body_frame, view='extractor', text="Body XPath:")
+        self.sitemap_label = MyLabel(master=self.sitemap_frame, view='extractor', text="Sitemap Links:")
+        self.link_regex_label = MyLabel(master=self.link_regex_frame, view='extractor', text="Link Regex Id:")
         self.last_extractor_user_label = MyLabel(master=self.info_frame, view='extractor', text="Last user(Extractor):", width=20)
         self.last_kraken_user_label = MyLabel(master=self.info_frame, view='extractor', text="Last user(Kraken):", width=20)
         self.domain_label = MyLabel(master=self.info_frame, view='extractor', text="Domain:", width=20)
@@ -136,7 +142,7 @@ class MainApplication(tk.Tk):
         self.finder_junk_label = MyLabel(master=self.finder_junk_frame, view='finder', text="Junk found:", width=15)
 
         # Extractor Textboxes
-        self.kraken_textbox = MyText(master=self.kraken_frame, view='extractor', height=1, width=60)
+        self.kraken_textbox = MyText(master=self.kraken_frame, view='extractor', height=2, width=60)
         self.json_textbox = MyText(master=self.json_full_frame, view='extractor', height=8, width=60)
         self.start_urls_textbox = MyText(master=self.start_urls_frame, view='extractor', height=2, width=60)
         self.menu_textbox = MyText(master=self.menu_frame, view='extractor', height=2, width=60)
@@ -145,6 +151,8 @@ class MainApplication(tk.Tk):
         self.pubdate_textbox = MyText(master=self.pubdate_frame, view='extractor', height=3, width=60)
         self.author_textbox = MyText(master=self.author_frame, view='extractor', height=2, width=60)
         self.body_textbox = MyText(master=self.body_frame, view='extractor', height=3, width=60)
+        self.sitemap_textbox = MyText(master=self.sitemap_frame, view='extractor', height=2, width=60)
+        self.link_regex_textbox = MyText(master=self.link_regex_frame, view='extractor', height=2, width=60)
 
         self.xpath_dict = {
             "start_urls": self.start_urls_textbox,
@@ -154,6 +162,8 @@ class MainApplication(tk.Tk):
             "pubdate_xpath": self.pubdate_textbox,
             "author_xpath": self.author_textbox,
             "body_xpath": self.body_textbox,
+            "sitemap_urls": self.sitemap_textbox,
+            "link_id_regex": self.link_regex_textbox,
         }
 
         # Finder Textboxes
@@ -358,6 +368,29 @@ class MainApplication(tk.Tk):
         self.body_not_self_button = MyButton(master=self.body_buttons_frame, view='extractor', text="Not Self",
                                              command=lambda: self.append_textbox_values(self.body_textbox,
                                                                                         after_value=f"[not(self::{self.clipboard_get().strip()})]"))
+        # Sitemap Buttons
+        self.copy_sitemap_button = MyButton(master=self.sitemap_buttons_frame, view='extractor', text="Copy",
+                                          command=lambda: self.copy_code(self.sitemap_textbox))
+        self.open_sitemap_button = MyButton(master=self.sitemap_buttons_frame, view='extractor', text='Open Link',
+                                         command=self.open_sitemap_urls_link)
+        self.sitemap_xml_button = MyButton(master=self.sitemap_buttons_frame,
+                                           view='extractor',
+                                           text="Xml",
+                                           command=lambda: self.replace_textbox_value(self.sitemap_textbox, self.get_domain()+'sitemap.xml'))
+        self.sitemap_html_button = MyButton(master=self.sitemap_buttons_frame,
+                                              view='extractor',
+                                              text="Html",
+                                              command=lambda: self.replace_textbox_value(self.sitemap_textbox, self.get_domain()+'sitemap.html'))
+
+
+        # Link Regex Id Buttons
+
+        self.copy_link_regex_button = MyButton(master=self.link_regex_buttons_frame, view='extractor', text="Copy",
+                                               command=lambda: self.copy_code(self.link_regex_textbox))
+
+        self.link_regex_button = MyButton(master=self.link_regex_buttons_frame, view='extractor', text="Rgx Word",
+                                          command=lambda: self.replace_textbox_value(self.link_regex_textbox, f"^(?P<id>https?://{self.get_domain().split('//')[1]}[^?#]+)"))
+
 
         # Bottom Frame MyButtons
         self.clear_button = MyButton(master=self.bottom_buttons_frame, view='extractor', text="Clear All", command=self.clear, style='Bold.TButton')
@@ -497,6 +530,22 @@ class MainApplication(tk.Tk):
         self.body_frame.frame_list = [
             [self.body_label],
             [self.body_textbox, self.body_buttons_frame]
+        ]
+        self.sitemap_buttons_frame.frame_list = [
+            [self.sitemap_label],
+            [self.copy_sitemap_button, self.open_sitemap_button, self.sitemap_xml_button, self.sitemap_html_button]
+        ]
+        self.sitemap_frame.frame_list = [
+            [self.sitemap_label],
+            [self.sitemap_textbox, self.sitemap_buttons_frame]
+        ]
+        self.link_regex_buttons_frame.frame_list = [
+            [self.link_regex_label],
+            [self.copy_link_regex_button, self.link_regex_button]
+        ]
+        self.link_regex_frame.frame_list = [
+            [self.link_regex_label],
+            [self.link_regex_textbox, self.link_regex_buttons_frame]
         ]
         self.bottom_buttons_frame.frame_list = [
             [self.generate_button, self.clear_button]
@@ -1013,6 +1062,14 @@ class MainApplication(tk.Tk):
                 link = link if link.endswith('/') else link + '/'
                 webbrowser.get("chrome").open(link)
 
+    def open_sitemap_urls_link(self):
+        links = self.get_strip(self.start_urls_textbox).split(',')
+        if links:
+            for link in links:
+                link = link.strip()
+                # link = link if link.endswith('/') else link + '/'
+                webbrowser.get("chrome").open(link)
+
     def get_domain(self, copy=False):
         link = self.get_strip(self.start_urls_textbox)
         if not link.startswith('http'):
@@ -1117,6 +1174,7 @@ class MainApplication(tk.Tk):
                 xpath = xpath.replace(s, '')
             json_var["scrapy_arguments"][xpath_name] = re.sub(r'(\S)\|(\S)', r'\1 | \2', xpath)
 
+
         elif xpath_name in json_var["scrapy_arguments"].keys() and self.not_empty():
             json_var["scrapy_arguments"].pop(xpath_name)
         return json_var
@@ -1125,13 +1183,17 @@ class MainApplication(tk.Tk):
     def edit_textbox(textbox, xpath_name, json_var):
         textbox.delete("1.0", tk.END)
         if xpath_name in json_var["scrapy_arguments"].keys():
-            textbox.insert('1.0', json_var["scrapy_arguments"][xpath_name])
+            value = json_var["scrapy_arguments"][xpath_name] or ''
+            textbox.insert('1.0', value)
 
     def default_changes(self, json_var):
         if "link_id_regex" not in json_var["scrapy_arguments"].keys():
             json_var["scrapy_arguments"]["link_id_regex"] = None
         for element in self.xpath_dict.keys():
             self.edit_textbox(self.xpath_dict[element], element, json_var)
+
+        if "sitemap_urls" in json_var["scrapy_arguments"].keys():
+            json_var["scrapy_arguments"]["sitemap_urls"] = [sitemap.strip() for sitemap in self.get_strip(self.xpath_dict["sitemap_urls"]).split(',')]
 
         if "scrapy_settings" in json_var.keys():
             json_var["scrapy_settings"].update(config.settings_json)
@@ -1231,7 +1293,7 @@ class MainApplication(tk.Tk):
                     "start_urls": "",
                     "articles_xpath": "",
                     "title_xpath": "",
-                    "body_xpath": ""
+                    "body_xpath": "",
                 },
                 "scrapy_settings": config.settings_json
             }
