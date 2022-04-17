@@ -1,0 +1,5 @@
+dropbox==11.26.0
+lxml==4.7.1
+pyperclip==1.8.2
+requests==2.27.1
+urllib3==1.26.8
