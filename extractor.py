@@ -371,8 +371,10 @@ class MainApplication(tk.Tk):
         # Sitemap Buttons
         self.copy_sitemap_button = MyButton(master=self.sitemap_buttons_frame, view='extractor', text="Copy",
                                           command=lambda: self.copy_code(self.sitemap_textbox))
-        self.open_sitemap_button = MyButton(master=self.sitemap_buttons_frame, view='extractor', text='Open Link',
+        self.open_sitemap_button = MyButton(master=self.sitemap_buttons_frame, view='extractor', text='Open Sitemap',
                                          command=self.open_sitemap_urls_link)
+        self.find_sitemap_in_robots_txt_button = MyButton(master=self.sitemap_buttons_frame, view='extractor', text='Find Sitemap',
+                                            command=lambda: self.replace_textbox_value(self.sitemap_textbox, self.find_sitemap_in_robots_txt()))
         self.sitemap_xml_button = MyButton(master=self.sitemap_buttons_frame,
                                            view='extractor',
                                            text="Xml",
@@ -532,15 +534,13 @@ class MainApplication(tk.Tk):
             [self.body_textbox, self.body_buttons_frame]
         ]
         self.sitemap_buttons_frame.frame_list = [
-            [self.sitemap_label],
-            [self.copy_sitemap_button, self.open_sitemap_button, self.sitemap_xml_button, self.sitemap_html_button]
+            [self.copy_sitemap_button, self.find_sitemap_in_robots_txt_button, self.open_sitemap_button, self.sitemap_xml_button, self.sitemap_html_button]
         ]
         self.sitemap_frame.frame_list = [
             [self.sitemap_label],
             [self.sitemap_textbox, self.sitemap_buttons_frame]
         ]
         self.link_regex_buttons_frame.frame_list = [
-            [self.link_regex_label],
             [self.copy_link_regex_button, self.link_regex_button]
         ]
         self.link_regex_frame.frame_list = [
@@ -1082,6 +1082,21 @@ class MainApplication(tk.Tk):
             pyperclip.copy(domain)
         else:
             return domain
+
+    def find_sitemap_in_robots_txt(self):
+        robots_txt_link = self.get_domain() + 'robots.txt'
+        url_regex = r'Sitemap: (https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})'
+        try:
+            sitemap_response = requests.get(robots_txt_link, headers=self.headers, verify=False)
+            if sitemap_response.url[-10:] != 'robots.txt':
+                return
+            sitemap_links = re.findall(url_regex, sitemap_response.text)
+            sitemap_links = ', '.join(sitemap_links)
+            return sitemap_links
+        except Exception as e:
+            print(e.args)
+            return
+
 
     def find_sitemap(self):
         xpath = "(//*[contains(@href, 'site') or contains(@href, 'Site')][contains(@href, 'map')] | //*[contains(@href, 'map')][contains(@href, 'web')])[1]/@href"
