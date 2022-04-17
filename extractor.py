@@ -388,7 +388,7 @@ class MainApplication(tk.Tk):
         self.copy_link_regex_button = MyButton(master=self.link_regex_buttons_frame, view='extractor', text="Copy",
                                                command=lambda: self.copy_code(self.link_regex_textbox))
 
-        self.link_regex_button = MyButton(master=self.link_regex_buttons_frame, view='extractor', text="Rgx Word",
+        self.link_regex_button = MyButton(master=self.link_regex_buttons_frame, view='extractor', text="Rgx Domain",
                                           command=lambda: self.replace_textbox_value(self.link_regex_textbox, f"^(?P<id>https?://{self.get_domain().split('//')[1]}[^?#]+)"))
 
 
@@ -853,6 +853,9 @@ class MainApplication(tk.Tk):
         else:
             return ""
 
+    def open_link_in_browser(self, link):
+        webbrowser.get("chrome").open(link)
+
     def load_from_kraken(self, link, open_source_bool=True):
         """
         Function to fill the extractor with the JSON from Kraken
@@ -868,7 +871,7 @@ class MainApplication(tk.Tk):
             print("No ID found")
             return
         if open_source_bool and self.open_links_check_bool.get():
-            webbrowser.get("chrome").open(link)
+            self.open_link_in_browser(link)
 
         # Show correctly formatted link in textbox
         self.kraken_textbox.delete('1.0', tk.END)
