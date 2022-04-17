@@ -1085,17 +1085,18 @@ class MainApplication(tk.Tk):
 
     def find_sitemap_in_robots_txt(self):
         robots_txt_link = self.get_domain() + 'robots.txt'
-        url_regex = r'Sitemap: (https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})'
+        url_regex = r'Sitemap:\s*(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})'
         try:
             sitemap_response = requests.get(robots_txt_link, headers=self.headers, verify=False)
-            if sitemap_response.url[-10:] != 'robots.txt':
-                return
+            if 'robots.txt' not in sitemap_response.url[-10:]:
+                return ''
+            print(sitemap_response.text)
             sitemap_links = re.findall(url_regex, sitemap_response.text)
             sitemap_links = ', '.join(sitemap_links)
             return sitemap_links
         except Exception as e:
             print(e.args)
-            return
+            return ''
 
 
     def find_sitemap(self):
