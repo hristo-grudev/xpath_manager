@@ -1,3 +1,4 @@
+import asyncio
 import json
 import os
 import re
@@ -381,8 +382,8 @@ class MainApplication(tk.Tk):
                                            command=lambda: self.replace_textbox_value(self.sitemap_textbox, self.get_domain()+'sitemap.xml'))
         self.sitemap_html_button = MyButton(master=self.sitemap_buttons_frame,
                                               view='extractor',
-                                              text="Html",
-                                              command=lambda: self.replace_textbox_value(self.sitemap_textbox, self.get_domain()+'sitemap.html'))
+                                              text="Index",
+                                              command=lambda: self.replace_textbox_value(self.sitemap_textbox, self.get_domain()+'sitemap_index.xml'))
 
 
         # Link Regex Id Buttons
@@ -858,6 +859,7 @@ class MainApplication(tk.Tk):
     def open_link_in_browser(self, link):
         webbrowser.get("chrome").open(link)
 
+
     def load_from_kraken(self, link, open_source_bool=True):
         """
         Function to fill the extractor with the JSON from Kraken
@@ -875,10 +877,6 @@ class MainApplication(tk.Tk):
         if open_source_bool and self.open_links_check_bool.get():
             self.open_link_in_browser(link)
 
-        # Show correctly formatted link in textbox
-        self.kraken_textbox.delete('1.0', tk.END)
-        self.kraken_textbox.insert('1.0', link)
-
         # Show if/who/when edited the source last
         con = sqlite3.connect(config.local_db_path)
         cur = con.cursor()
@@ -888,59 +886,65 @@ class MainApplication(tk.Tk):
         if result:
             self.last_extractor_user_var_label['text'] = f"{result[1]}({result[0][:-3]})"
 
-        items_link = link.replace('/edit', '')
-        last_editor_xpath = '//tr[td[child::text()[contains(.,"Updated by")]]]/td[2]//text()'
-        last_update_xpath = '//tr[td[child::text()[contains(.,"Last update")]]]/td[2]/text()'
-        enabled_xpath = '//tr[td[child::text()[contains(.,"Enabled")]]]/td[2]/i[contains(@class, "true")]'
-        active_xpath = '//tr[td[child::text()[contains(.,"Active")]]]/td[2]/i[contains(@class, "true")]'
-        botname_xpath = '//tr[td[child::text()[contains(.,"Botname")]]]/td[2]/text()'
-        projects_xpath = '//tr[td[child::text()[contains(.,"Projects")]]]/td[2]//li/a/text()'
-        name_xpath = '//tr[td[child::text()[contains(.,"Name")]]]/td[2]/text()'
-        domain_xpath = '//tr[td[child::text()[contains(.,"URL")]]]/td[2]/a/text()'
-        try:
-            items_page_response = self.session.get(items_link)
-        except Exception:
-            print("Couldn't access Kraken")
-            return
-        tree = html.fromstring(items_page_response.text)
-        last_editor = tree.xpath(last_editor_xpath)[1].strip() if len(tree.xpath(last_editor_xpath)) > 2 else "None"
-        last_update = tree.xpath(last_update_xpath)[0][:-3]
-        enabled = bool(tree.xpath(enabled_xpath))
-        active = bool(tree.xpath(active_xpath))
-        botname = tree.xpath(botname_xpath)[0]
-        projects = tree.xpath(projects_xpath)
-        name = tree.xpath(name_xpath)[0]
-        domain = tree.xpath(domain_xpath)[0]
-        if enabled:
-            if active:
-                status = "Running"
+            # Show correctly formatted link in textbox
+            self.kraken_textbox.delete('1.0', tk.END)
+            self.kraken_textbox.insert('1.0', link)
+
+            items_link = link.replace('/edit', '')
+            last_editor_xpath = '//tr[td[child::text()[contains(.,"Updated by")]]]/td[2]//text()'
+            last_update_xpath = '//tr[td[child::text()[contains(.,"Last update")]]]/td[2]/text()'
+            enabled_xpath = '//tr[td[child::text()[contains(.,"Enabled")]]]/td[2]/i[contains(@class, "true")]'
+            active_xpath = '//tr[td[child::text()[contains(.,"Active")]]]/td[2]/i[contains(@class, "true")]'
+            botname_xpath = '//tr[td[child::text()[contains(.,"Botname")]]]/td[2]/text()'
+            projects_xpath = '//tr[td[child::text()[contains(.,"Projects")]]]/td[2]//li/a/text()'
+            name_xpath = '//tr[td[child::text()[contains(.,"Name")]]]/td[2]/text()'
+            domain_xpath = '//tr[td[child::text()[contains(.,"URL")]]]/td[2]/a/text()'
+            try:
+                items_page_response = self.session.get(items_link)
+            except Exception:
+                print("Couldn't access Kraken")
+                return
+            tree = html.fromstring(items_page_response.text)
+            last_editor = tree.xpath(last_editor_xpath)[1].strip() if len(
+                tree.xpath(last_editor_xpath)) > 2 else "None"
+            last_update = tree.xpath(last_update_xpath)[0][:-3]
+            enabled = bool(tree.xpath(enabled_xpath))
+            active = bool(tree.xpath(active_xpath))
+            botname = tree.xpath(botname_xpath)[0]
+            projects = tree.xpath(projects_xpath)
+            name = tree.xpath(name_xpath)[0]
+            domain = tree.xpath(domain_xpath)[0]
+            if enabled:
+                if active:
+                    status = "Running"
+                else:
+                    status = "Enabled, but not Active(?)"
             else:
-                status = "Enabled, but not Active(?)"
-        else:
-            if active:
-                status = "Custom"
-            else:
-                status = "Stopped"
-        self.last_kraken_user_var_label['text'] = f"{last_editor}({last_update})"
-        self.status_var_label['text'] = status
-        self.projects_var_label['text'] = ','.join(projects)
-        self.botname_var_label['text'] = botname
-        self.name_var_label['text'] = name
-        self.domain_var_label['text'] = domain
-        xpath = "//input[@name='feed_properties']/@value"
-        link = link.strip()
-        kraken_response = self.session.get(link)
-        tree = html.fromstring(kraken_response.text)
-        code = tree.xpath(xpath)
-        code = ''.join(code).replace('\r', '').replace('\n', '')
-        try:
-            generated_json = json.loads(code)
-        except JSONDecodeError:
-            # This error indicates the login details are wrong
-            print("Incorrect Login Details")
-            return
-        self.generate(initial_json=generated_json)  # Pass JSON to generate function
-        self.info_label["text"] = "Source loaded."
+                if active:
+                    status = "Custom"
+                else:
+                    status = "Stopped"
+            self.last_kraken_user_var_label['text'] = f"{last_editor}({last_update})"
+            self.status_var_label['text'] = status
+            self.projects_var_label['text'] = ','.join(projects)
+            self.botname_var_label['text'] = botname
+            self.name_var_label['text'] = name
+            self.domain_var_label['text'] = domain
+            xpath = "//input[@name='feed_properties']/@value"
+            link = link.strip()
+            kraken_response = self.session.get(link)
+            tree = html.fromstring(kraken_response.text)
+            code = tree.xpath(xpath)
+            code = ''.join(code).replace('\r', '').replace('\n', '')
+            try:
+                generated_json = json.loads(code)
+            except JSONDecodeError:
+                # This error indicates the login details are wrong
+                print("Incorrect Login Details")
+                return
+            self.generate(initial_json=generated_json)  # Pass JSON to generate function
+            self.info_label["text"] = "Source loaded."
+
 
     @staticmethod
     def open_link(link):
