@@ -692,9 +692,11 @@ class MainApplication(tk.Tk):
                 "http": http_proxy,
                 "https": https_proxy
             }
-            self.session.trust_env = False
-            self.session.proxies = proxies
-            self.session.auth = HTTPProxyAuth(login_data.proxy_user, login_data.proxy_password)
+            if config.connection_type == 'proxy':
+                self.session.trust_env = False
+                self.session.proxies = proxies
+                self.session.auth = HTTPProxyAuth(login_data.proxy_user, login_data.proxy_password)
+
 
             self.session.get(login_link, headers=self.headers)
             if 'csrftoken' in self.session.cookies:
