@@ -1099,7 +1099,7 @@ class MainApplication(tk.Tk):
                 return ''
             print(sitemap_response.text)
             sitemap_links = re.findall(url_regex, sitemap_response.text)
-            sitemap_links = ', '.join(sitemap_links)
+            sitemap_links = ' '.join(sitemap_links)
             return sitemap_links
         except Exception as e:
             print(e.args)
@@ -1219,7 +1219,7 @@ class MainApplication(tk.Tk):
             self.edit_textbox(self.xpath_dict[element], element, json_var)
 
         if "sitemap_urls" in json_var["scrapy_arguments"].keys():
-            json_var["scrapy_arguments"]["sitemap_urls"] = [sitemap.strip() for sitemap in self.get_strip(self.xpath_dict["sitemap_urls"]).split(',')]
+            json_var["scrapy_arguments"]["sitemap_urls"] = [sitemap.strip() for sitemap in self.get_strip(self.xpath_dict["sitemap_urls"]).split()]
 
         if "scrapy_settings" in json_var.keys():
             json_var["scrapy_settings"].update(config.settings_json)

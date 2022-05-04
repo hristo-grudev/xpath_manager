@@ -1,29 +1,24 @@
-import requests
+from collections import OrderedDict
 
-link = 'http://bulnews.info/feed/'
+print("Before deleting:\n")
+od = OrderedDict()
+od['2022-03-26'] = 1
+od['2022-02-26'] = 2
+od['2022-03-05'] = 3
+od['2022-03-12'] = 4
 
-headers = {
-    'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0',
-}
+new_list = sorted(od.items(), key=lambda x: x[0])
+print("Sorted keys", new_list)
 
-list_of_proxies = (
-    'http://ch.proxymesh.com:31280/',
-    'http://au.proxymesh.com:31280/',
-    'http://sg.proxymesh.com:31280/',
-    'http://open.proxymesh.com:31280/',
-    'http://jp.proxymesh.com:31280/',
-    'http://us-ny.proxymesh.com:31280/',
-    'http://us-ca.proxymesh.com:31280',
-    'http://us.proxymesh.com:31280/',
-    'http://us-fl.proxymesh.com:31280/',
-    'http://us-wa.proxymesh.com:31280/',
-)
+for key, value in od.items():
+    print(key, value)
 
+print("\nAfter deleting:\n")
+od.pop('2022-03-05')
+for key, value in od.items():
+    print(key, value)
 
-def proxy_dict(proxy):
-    return {'http': proxy}
-
-
-for proxi in list_of_proxies:
-    response = requests.get(link, headers=headers, proxies=proxy_dict(proxi))
-    print(proxi, response.status_code)
+print("\nAfter re-inserting:\n")
+od['2021-10-23'] = 3
+for key, value in od.items():
+    print(key, value)
