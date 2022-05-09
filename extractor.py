@@ -1073,7 +1073,7 @@ class MainApplication(tk.Tk):
                 webbrowser.get("chrome").open(link)
 
     def open_sitemap_urls_link(self):
-        links = self.get_strip(self.sitemap_textbox).split(',')
+        links = self.get_strip(self.sitemap_textbox).split(' ')
         if links:
             for link in links:
                 link = link.strip()
