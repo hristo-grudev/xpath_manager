@@ -1065,7 +1065,7 @@ class MainApplication(tk.Tk):
             pyperclip.copy(value+node)
 
     def open_start_urls_link(self):
-        links = self.get_strip(self.start_urls_textbox).split(';')
+        links = re.split(r'\s;',self.get_strip(self.start_urls_textbox))
         if links:
             for link in links:
                 link = link.strip()
@@ -1084,7 +1084,7 @@ class MainApplication(tk.Tk):
         link = self.get_strip(self.start_urls_textbox)
         if not link.startswith('http'):
             link = 'http://' + link
-        domain = "/".join(link.split(';')[0].split('/')[:3]) + '/'
+        domain = "/".join(re.split(r'\s;', link)[0].split('/')[:3]) + '/'
         if copy:
             pyperclip.copy(domain)
         else:
@@ -1217,6 +1217,9 @@ class MainApplication(tk.Tk):
             json_var["scrapy_arguments"]["link_id_regex"] = None
         for element in self.xpath_dict.keys():
             self.edit_textbox(self.xpath_dict[element], element, json_var)
+
+        if "start_urls" in json_var["scrapy_arguments"].keys():
+            json_var["scrapy_arguments"]["start_urls"] = ';'.join(self.get_strip(self.xpath_dict["start_urls"]).split(' '))
 
         if "sitemap_urls" in json_var["scrapy_arguments"].keys():
             json_var["scrapy_arguments"]["sitemap_urls"] = [sitemap.strip() for sitemap in self.get_strip(self.xpath_dict["sitemap_urls"]).split()]
