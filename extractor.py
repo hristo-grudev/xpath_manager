@@ -1065,7 +1065,7 @@ class MainApplication(tk.Tk):
             pyperclip.copy(value+node)
 
     def open_start_urls_link(self):
-        links = re.split(r'\s;',self.get_strip(self.start_urls_textbox))
+        links = self.get_strip(self.start_urls_textbox).split(";")
         if links:
             for link in links:
                 link = link.strip()
