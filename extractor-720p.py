@@ -1,4 +1,3 @@
-import asyncio
 import json
 import os
 import re
@@ -53,15 +52,15 @@ class MainApplication(tk.Tk):
         self.general_style.theme_use('clam')
         self.frame_style.configure('TFrame', background=config.background)
         self.checkbutton_style.configure('TCheckbutton', background=config.background)
-        self.label_style.configure('TLabel', background=config.background, font=(config.label_font, 9))
-        self.label_style.configure('TRadiobutton', background=config.background, font=(config.label_font, 9))
-        self.label_style_bold.configure('Bold.TLabel', background=config.background, font=(config.label_font, 9, 'bold'))
-        self.button_style.configure('TButton', font=(config.button_font, 9), width=8)
-        self.button_style_bold.configure('Bold.TButton', font=(config.button_font, 10, 'bold'), width=10)
-        self.text_font = Font(family=config.label_font, size=10)
+        self.label_style.configure('TLabel', background=config.background, font=(config.label_font, 5))
+        self.label_style.configure('TRadiobutton', background=config.background, font=(config.label_font, 6))
+        self.label_style_bold.configure('Bold.TLabel', background=config.background, font=(config.label_font, 6, 'bold'))
+        self.button_style.configure('TButton', font=(config.button_font, 6), width=8)
+        self.button_style_bold.configure('Bold.TButton', font=(config.button_font, 6, 'bold'), width=9)
+        self.text_font = Font(family=config.label_font, size=6)
 
         # Extractor Frames (Order chosen here)
-        self.view_menu_frame = MyFrame(master=self, padding=5, view='menu')
+        self.view_menu_frame = MyFrame(master=self, padding=1, view='menu')
         self.info_frame = MyFrame(master=self, view='extractor')
         self.kraken_frame = MyFrame(master=self, view='extractor')
         self.json_full_frame = MyFrame(master=self, view='extractor')
@@ -84,15 +83,15 @@ class MainApplication(tk.Tk):
         self.bottom_buttons_frame = MyFrame(master=self, view='extractor')
 
         # Finder Frames (Order chosen here)
-        self.finder_filter_frame = MyFrame(master=self, view='finder', padding=10)
-        self.article_url_frame = MyFrame(master=self, view='finder', padding=10)
-        self.finder_title_frame = MyFrame(master=self, view='finder', padding=10)
-        self.finder_pubdate_frame = MyFrame(master=self, view='finder', padding=10)
-        self.finder_author_frame = MyFrame(master=self, view='finder', padding=10)
-        self.finder_body_frame = MyFrame(master=self, view='finder', padding=10)
-        self.finder_image_frame = MyFrame(master=self, view='finder', padding=10)
-        self.junk_xpath_body_frame = MyFrame(master=self, view='finder', padding=10)
-        self.finder_junk_frame = MyFrame(master=self, view='finder', padding=10)
+        self.finder_filter_frame = MyFrame(master=self, view='finder', padding=5)
+        self.article_url_frame = MyFrame(master=self, view='finder', padding=5)
+        self.finder_title_frame = MyFrame(master=self, view='finder', padding=5)
+        self.finder_pubdate_frame = MyFrame(master=self, view='finder', padding=5)
+        self.finder_author_frame = MyFrame(master=self, view='finder', padding=5)
+        self.finder_body_frame = MyFrame(master=self, view='finder', padding=5)
+        self.finder_image_frame = MyFrame(master=self, view='finder', padding=5)
+        self.junk_xpath_body_frame = MyFrame(master=self, view='finder', padding=5)
+        self.finder_junk_frame = MyFrame(master=self, view='finder', padding=5)
 
         # Menu Labels
         self.info_label = MyLabel(master=self.view_menu_frame, view='menu', text="", width=70, justify=tk.CENTER, style='Bold.TLabel', anchor='center')
@@ -143,17 +142,17 @@ class MainApplication(tk.Tk):
         self.finder_junk_label = MyLabel(master=self.finder_junk_frame, view='finder', text="Junk found:", width=15)
 
         # Extractor Textboxes
-        self.kraken_textbox = MyText(master=self.kraken_frame, view='extractor', height=2, width=60)
-        self.json_textbox = MyText(master=self.json_full_frame, view='extractor', height=8, width=60)
-        self.start_urls_textbox = MyText(master=self.start_urls_frame, view='extractor', height=2, width=60)
-        self.menu_textbox = MyText(master=self.menu_frame, view='extractor', height=2, width=60)
-        self.articles_textbox = MyText(master=self.articles_frame, view='extractor', height=2, width=60)
-        self.title_textbox = MyText(master=self.title_frame, view='extractor', height=2, width=60)
-        self.pubdate_textbox = MyText(master=self.pubdate_frame, view='extractor', height=3, width=60)
-        self.author_textbox = MyText(master=self.author_frame, view='extractor', height=2, width=60)
-        self.body_textbox = MyText(master=self.body_frame, view='extractor', height=3, width=60)
-        self.sitemap_textbox = MyText(master=self.sitemap_frame, view='extractor', height=2, width=60)
-        self.link_regex_textbox = MyText(master=self.link_regex_frame, view='extractor', height=2, width=60)
+        self.kraken_textbox = MyText(master=self.kraken_frame, view='extractor', height=1.8, width=60)
+        self.json_textbox = MyText(master=self.json_full_frame, view='extractor', height=7, width=60)
+        self.start_urls_textbox = MyText(master=self.start_urls_frame, view='extractor', height=1.8, width=60)
+        self.menu_textbox = MyText(master=self.menu_frame, view='extractor', height=1.8, width=60)
+        self.articles_textbox = MyText(master=self.articles_frame, view='extractor', height=1.8, width=60)
+        self.title_textbox = MyText(master=self.title_frame, view='extractor', height=1.8, width=60)
+        self.pubdate_textbox = MyText(master=self.pubdate_frame, view='extractor', height=2.7, width=60)
+        self.author_textbox = MyText(master=self.author_frame, view='extractor', height=1.8, width=60)
+        self.body_textbox = MyText(master=self.body_frame, view='extractor', height=1.8, width=60)
+        self.sitemap_textbox = MyText(master=self.sitemap_frame, view='extractor', height=1.8, width=60)
+        self.link_regex_textbox = MyText(master=self.link_regex_frame, view='extractor', height=1.8, width=60)
 
         self.xpath_dict = {
             "start_urls": self.start_urls_textbox,
@@ -168,56 +167,56 @@ class MainApplication(tk.Tk):
         }
 
         # Finder Textboxes
-        self.finder_article_textbox = MyText(master=self.article_url_frame, view='finder', height=1, width=81)
-        self.finder_junk_textbox = MyText(master=self.junk_xpath_body_frame, view='finder', height=2, width=60)
-        self.finder_title_xpath_1 = MyText(master=self.finder_title_frame, view='finder', height=1, width=40)
-        self.finder_title_xpath_2 = MyText(master=self.finder_title_frame, view='finder', height=1, width=40)
-        self.finder_title_xpath_3 = MyText(master=self.finder_title_frame, view='finder', height=1, width=40)
-        self.finder_title_xpath_4 = MyText(master=self.finder_title_frame, view='finder', height=1, width=40)
-        self.finder_title_result_1 = MyText(master=self.finder_title_frame, view='finder', height=1, width=40)
-        self.finder_title_result_2 = MyText(master=self.finder_title_frame, view='finder', height=1, width=40)
-        self.finder_title_result_3 = MyText(master=self.finder_title_frame, view='finder', height=1, width=40)
-        self.finder_title_result_4 = MyText(master=self.finder_title_frame, view='finder', height=1, width=40)
-        self.finder_pubdate_xpath_1 = MyText(master=self.finder_pubdate_frame, view='finder', height=1, width=40)
-        self.finder_pubdate_xpath_2 = MyText(master=self.finder_pubdate_frame, view='finder', height=1, width=40)
-        self.finder_pubdate_xpath_3 = MyText(master=self.finder_pubdate_frame, view='finder', height=1, width=40)
-        self.finder_pubdate_xpath_4 = MyText(master=self.finder_pubdate_frame, view='finder', height=1, width=40)
-        self.finder_pubdate_result_1 = MyText(master=self.finder_pubdate_frame, view='finder', height=1, width=40)
-        self.finder_pubdate_result_2 = MyText(master=self.finder_pubdate_frame, view='finder', height=1, width=40)
-        self.finder_pubdate_result_3 = MyText(master=self.finder_pubdate_frame, view='finder', height=1, width=40)
-        self.finder_pubdate_result_4 = MyText(master=self.finder_pubdate_frame, view='finder', height=1, width=40)
-        self.finder_author_xpath_1 = MyText(master=self.finder_author_frame, view='finder', height=1, width=40)
-        self.finder_author_xpath_2 = MyText(master=self.finder_author_frame, view='finder', height=1, width=40)
-        self.finder_author_xpath_3 = MyText(master=self.finder_author_frame, view='finder', height=1, width=40)
-        self.finder_author_xpath_4 = MyText(master=self.finder_author_frame, view='finder', height=1, width=40)
-        self.finder_author_result_1 = MyText(master=self.finder_author_frame, view='finder', height=1, width=40)
-        self.finder_author_result_2 = MyText(master=self.finder_author_frame, view='finder', height=1, width=40)
-        self.finder_author_result_3 = MyText(master=self.finder_author_frame, view='finder', height=1, width=40)
-        self.finder_author_result_4 = MyText(master=self.finder_author_frame, view='finder', height=1, width=40)
-        self.finder_body_xpath_1 = MyText(master=self.finder_body_frame, view='finder', height=1, width=40)
-        self.finder_body_xpath_2 = MyText(master=self.finder_body_frame, view='finder', height=1, width=40)
-        self.finder_body_xpath_3 = MyText(master=self.finder_body_frame, view='finder', height=1, width=40)
-        self.finder_body_xpath_4 = MyText(master=self.finder_body_frame, view='finder', height=1, width=40)
-        self.finder_body_result_1 = MyText(master=self.finder_body_frame, view='finder', height=1, width=40)
-        self.finder_body_result_2 = MyText(master=self.finder_body_frame, view='finder', height=1, width=40)
-        self.finder_body_result_3 = MyText(master=self.finder_body_frame, view='finder', height=1, width=40)
-        self.finder_body_result_4 = MyText(master=self.finder_body_frame, view='finder', height=1, width=40)
-        self.finder_image_xpath_1 = MyText(master=self.finder_image_frame, view='finder', height=1, width=40)
-        self.finder_image_xpath_2 = MyText(master=self.finder_image_frame, view='finder', height=1, width=40)
-        self.finder_image_xpath_3 = MyText(master=self.finder_image_frame, view='finder', height=1, width=40)
-        self.finder_image_xpath_4 = MyText(master=self.finder_image_frame, view='finder', height=1, width=40)
-        self.finder_image_result_1 = MyText(master=self.finder_image_frame, view='finder', height=1, width=40)
-        self.finder_image_result_2 = MyText(master=self.finder_image_frame, view='finder', height=1, width=40)
-        self.finder_image_result_3 = MyText(master=self.finder_image_frame, view='finder', height=1, width=40)
-        self.finder_image_result_4 = MyText(master=self.finder_image_frame, view='finder', height=1, width=40)
-        self.finder_junk_xpath_1 = MyText(master=self.finder_junk_frame, view='finder', height=1, width=40)
-        self.finder_junk_xpath_2 = MyText(master=self.finder_junk_frame, view='finder', height=1, width=40)
-        self.finder_junk_xpath_3 = MyText(master=self.finder_junk_frame, view='finder', height=1, width=40)
-        self.finder_junk_xpath_4 = MyText(master=self.finder_junk_frame, view='finder', height=1, width=40)
-        self.finder_junk_result_1 = MyText(master=self.finder_junk_frame, view='finder', height=1, width=40)
-        self.finder_junk_result_2 = MyText(master=self.finder_junk_frame, view='finder', height=1, width=40)
-        self.finder_junk_result_3 = MyText(master=self.finder_junk_frame, view='finder', height=1, width=40)
-        self.finder_junk_result_4 = MyText(master=self.finder_junk_frame, view='finder', height=1, width=40)
+        self.finder_article_textbox = MyText(master=self.article_url_frame, view='finder', height=0.9, width=81)
+        self.finder_junk_textbox = MyText(master=self.junk_xpath_body_frame, view='finder', height=1.8, width=60)
+        self.finder_title_xpath_1 = MyText(master=self.finder_title_frame, view='finder', height=0.9, width=40)
+        self.finder_title_xpath_2 = MyText(master=self.finder_title_frame, view='finder', height=0.9, width=40)
+        self.finder_title_xpath_3 = MyText(master=self.finder_title_frame, view='finder', height=0.9, width=40)
+        self.finder_title_xpath_4 = MyText(master=self.finder_title_frame, view='finder', height=0.9, width=40)
+        self.finder_title_result_1 = MyText(master=self.finder_title_frame, view='finder', height=0.9, width=40)
+        self.finder_title_result_2 = MyText(master=self.finder_title_frame, view='finder', height=0.9, width=40)
+        self.finder_title_result_3 = MyText(master=self.finder_title_frame, view='finder', height=0.9, width=40)
+        self.finder_title_result_4 = MyText(master=self.finder_title_frame, view='finder', height=0.9, width=40)
+        self.finder_pubdate_xpath_1 = MyText(master=self.finder_pubdate_frame, view='finder', height=0.9, width=40)
+        self.finder_pubdate_xpath_2 = MyText(master=self.finder_pubdate_frame, view='finder', height=0.9, width=40)
+        self.finder_pubdate_xpath_3 = MyText(master=self.finder_pubdate_frame, view='finder', height=0.9, width=40)
+        self.finder_pubdate_xpath_4 = MyText(master=self.finder_pubdate_frame, view='finder', height=0.9, width=40)
+        self.finder_pubdate_result_1 = MyText(master=self.finder_pubdate_frame, view='finder', height=0.9, width=40)
+        self.finder_pubdate_result_2 = MyText(master=self.finder_pubdate_frame, view='finder', height=0.9, width=40)
+        self.finder_pubdate_result_3 = MyText(master=self.finder_pubdate_frame, view='finder', height=0.9, width=40)
+        self.finder_pubdate_result_4 = MyText(master=self.finder_pubdate_frame, view='finder', height=0.9, width=40)
+        self.finder_author_xpath_1 = MyText(master=self.finder_author_frame, view='finder', height=0.9, width=40)
+        self.finder_author_xpath_2 = MyText(master=self.finder_author_frame, view='finder', height=0.9, width=40)
+        self.finder_author_xpath_3 = MyText(master=self.finder_author_frame, view='finder', height=0.9, width=40)
+        self.finder_author_xpath_4 = MyText(master=self.finder_author_frame, view='finder', height=0.9, width=40)
+        self.finder_author_result_1 = MyText(master=self.finder_author_frame, view='finder', height=0.9, width=40)
+        self.finder_author_result_2 = MyText(master=self.finder_author_frame, view='finder', height=0.9, width=40)
+        self.finder_author_result_3 = MyText(master=self.finder_author_frame, view='finder', height=0.9, width=40)
+        self.finder_author_result_4 = MyText(master=self.finder_author_frame, view='finder', height=0.9, width=40)
+        self.finder_body_xpath_1 = MyText(master=self.finder_body_frame, view='finder', height=0.9, width=40)
+        self.finder_body_xpath_2 = MyText(master=self.finder_body_frame, view='finder', height=0.9, width=40)
+        self.finder_body_xpath_3 = MyText(master=self.finder_body_frame, view='finder', height=0.9, width=40)
+        self.finder_body_xpath_4 = MyText(master=self.finder_body_frame, view='finder', height=0.9, width=40)
+        self.finder_body_result_1 = MyText(master=self.finder_body_frame, view='finder', height=0.9, width=40)
+        self.finder_body_result_2 = MyText(master=self.finder_body_frame, view='finder', height=0.9, width=40)
+        self.finder_body_result_3 = MyText(master=self.finder_body_frame, view='finder', height=0.9, width=40)
+        self.finder_body_result_4 = MyText(master=self.finder_body_frame, view='finder', height=0.9, width=40)
+        self.finder_image_xpath_1 = MyText(master=self.finder_image_frame, view='finder', height=0.9, width=40)
+        self.finder_image_xpath_2 = MyText(master=self.finder_image_frame, view='finder', height=0.9, width=40)
+        self.finder_image_xpath_3 = MyText(master=self.finder_image_frame, view='finder', height=0.9, width=40)
+        self.finder_image_xpath_4 = MyText(master=self.finder_image_frame, view='finder', height=0.9, width=40)
+        self.finder_image_result_1 = MyText(master=self.finder_image_frame, view='finder', height=0.9, width=40)
+        self.finder_image_result_2 = MyText(master=self.finder_image_frame, view='finder', height=0.9, width=40)
+        self.finder_image_result_3 = MyText(master=self.finder_image_frame, view='finder', height=0.9, width=40)
+        self.finder_image_result_4 = MyText(master=self.finder_image_frame, view='finder', height=0.9, width=40)
+        self.finder_junk_xpath_1 = MyText(master=self.finder_junk_frame, view='finder', height=0.9, width=40)
+        self.finder_junk_xpath_2 = MyText(master=self.finder_junk_frame, view='finder', height=0.9, width=40)
+        self.finder_junk_xpath_3 = MyText(master=self.finder_junk_frame, view='finder', height=0.9, width=40)
+        self.finder_junk_xpath_4 = MyText(master=self.finder_junk_frame, view='finder', height=0.9, width=40)
+        self.finder_junk_result_1 = MyText(master=self.finder_junk_frame, view='finder', height=0.9, width=40)
+        self.finder_junk_result_2 = MyText(master=self.finder_junk_frame, view='finder', height=0.9, width=40)
+        self.finder_junk_result_3 = MyText(master=self.finder_junk_frame, view='finder', height=0.9, width=40)
+        self.finder_junk_result_4 = MyText(master=self.finder_junk_frame, view='finder', height=0.9, width=40)
 
         # View Menu Buttons
         self.open_extractor_button = MyButton(master=self.view_menu_frame, view='menu', text="Extractor", command=lambda: self.switch_view(view_to_open='extractor'))
@@ -403,7 +402,7 @@ class MainApplication(tk.Tk):
 
         # Finder Buttons
         self.find_content_button = MyButton(master=self.article_url_frame, view='finder', text="Find", command=self.find_content, padding=0)
-        self.find_junk_button = MyButton(master=self.junk_xpath_body_frame, view='finder', text="Find", command=self.find_junk, style="Bold.TButton", padding=5)
+        self.find_junk_button = MyButton(master=self.junk_xpath_body_frame, view='finder', text="Find", command=self.find_junk, style="Bold.TButton", padding=3)
         self.add_node_button = MyButton(master=self.junk_xpath_body_frame, view='finder', text="/node()", command=lambda: self.append_textbox_values(
             textbox=self.finder_junk_textbox,
             after_value='/node()'))
@@ -475,18 +474,16 @@ class MainApplication(tk.Tk):
             [self.open_extractor_button, self.open_finder_button, self.info_label, self.sync_button, self.refresh_db_button]
         ]
         self.info_frame.frame_list = [
-            [self.last_kraken_user_label, self.last_kraken_user_var_label, self.projects_label, self.projects_var_label],
-            [self.last_extractor_user_label, self.last_extractor_user_var_label, self.status_label, self.status_var_label, self.botname_label, self.botname_var_label],
-            [self.domain_label, self.domain_var_label, self.name_label, self.name_var_label]
+            [self.last_kraken_user_label, self.last_kraken_user_var_label, self.projects_label, self.projects_var_label, self.domain_label, self.domain_var_label, self.name_label, self.name_var_label],
+            [self.last_extractor_user_label, self.last_extractor_user_var_label, self.status_label, self.status_var_label, self.botname_label, self.botname_var_label]
         ]
         self.kraken_frame.frame_list = [
-            [self.kraken_id_label],
+            # [self.kraken_id_label],
             [self.kraken_textbox, self.kraken_clipboard_button, self.open_source_button, self.load_from_db_button, self.open_items_button]
         ]
         self.json_buttons_frame.frame_list = [
-            [self.code_copy_button, self.load_from_existing_button, self.load_without_url_button, self.add_proxy_button],
-            [self.allowed_domains_button, self.pubdate_required_button, self.init_wait_button, self.article_wait_button],
-            [self.date_order_DMY, self.date_order_MDY, self.date_order_YMD, self.date_order_label]
+            [self.code_copy_button, self.load_from_existing_button, self.load_without_url_button, self.add_proxy_button, self.allowed_domains_button, self.pubdate_required_button],
+            [self.init_wait_button, self.article_wait_button, self.date_order_DMY, self.date_order_MDY, self.date_order_YMD, self.date_order_label]
         ]
         self.json_checkbutton_frame.frame_list = [
             [self.open_source_checkbutton, self.overwrite_domain_checkbutton, self.rdc_checkbutton]
@@ -529,8 +526,7 @@ class MainApplication(tk.Tk):
         ]
         self.body_buttons_frame.frame_list = [
             [self.copy_body_button, self.body_not_contains_class_button, self.body_not_contains_desc_class_button,
-             self.body_not_contains_id_button, self.body_not_contains_text_button],
-            [self.body_not_self_button, self.body_single_button]
+             self.body_not_contains_id_button, self.body_not_contains_text_button, self.body_not_self_button, self.body_single_button]
         ]
         self.body_frame.frame_list = [
             [self.body_label],
@@ -665,14 +661,14 @@ class MainApplication(tk.Tk):
                 else:
                     self.pack_frame(widget.frame_list)
                 if widget in self.winfo_children():
-                    widget.grid(row=row, column=0, sticky='W', padx=20, pady=0)
+                    widget.grid(row=row, column=0, sticky='W', padx=10, pady=0)
                     row += 1
             if hasattr(widget, 'view') and widget.view != 'extractor' and widget.view != 'menu':
                 widget.grid_remove()
 
     def window_setup(self):
-        width = 850
-        height = 1080
+        width = 720
+        height = 768
         starting_height = 0
         if config.side_of_window == "r":
             starting_width = self.winfo_screenwidth() - width - 6
