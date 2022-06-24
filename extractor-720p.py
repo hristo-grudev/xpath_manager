@@ -52,16 +52,16 @@ class MainApplication(tk.Tk):
         self.general_style.theme_use('clam')
         self.frame_style.configure('TFrame', background=config.background)
         self.checkbutton_style.configure('TCheckbutton', background=config.background)
-        self.label_style.configure('TLabel', background=config.background, font=(config.label_font, 7))
+        self.label_style.configure('TLabel', background=config.background, font=(config.label_font, 6))
         self.label_style.configure('TRadiobutton', background=config.background, font=(config.label_font, 7))
-        self.label_style_bold.configure('Bold.TLabel', background=config.background, font=(config.label_font, 7, 'bold'))
-        self.button_style.configure('TButton', font=(config.button_font, 7), width=8)
-        self.button_style_bold.configure('Bold.TButton', font=(config.button_font, 7, 'bold'), width=9)
+        self.label_style_bold.configure('Bold.TLabel', background=config.background, font=(config.label_font, 6, 'bold'))
+        self.button_style.configure('TButton', font=(config.button_font, 6), width=10)
+        self.button_style_bold.configure('Bold.TButton', font=(config.button_font, 6, 'bold'), width=10)
         self.text_font = Font(family=config.label_font, size=7)
 
         # Extractor Frames (Order chosen here)
         self.view_menu_frame = MyFrame(master=self, padding=1, view='menu')
-        self.info_frame = MyFrame(master=self, view='extractor')
+        # self.info_frame = MyFrame(master=self, view='extractor')
         self.kraken_frame = MyFrame(master=self, view='extractor')
         self.json_full_frame = MyFrame(master=self, view='extractor')
         self.json_combined_buttons_frame = MyFrame(master=self.json_full_frame, view='extractor')
@@ -108,26 +108,26 @@ class MainApplication(tk.Tk):
         self.body_label = MyLabel(master=self.body_frame, view='extractor', text="Body XPath:")
         self.sitemap_label = MyLabel(master=self.sitemap_frame, view='extractor', text="Sitemap Links:")
         self.link_regex_label = MyLabel(master=self.link_regex_frame, view='extractor', text="Link Regex Id:")
-        self.last_extractor_user_label = MyLabel(master=self.info_frame, view='extractor', text="Last user(Extractor):", width=15)
-        self.last_kraken_user_label = MyLabel(master=self.info_frame, view='extractor', text="Last user(Kraken):", width=15)
-        self.domain_label = MyLabel(master=self.info_frame, view='extractor', text="Domain:", width=10)
-        self.status_label = MyLabel(master=self.info_frame, view='extractor', text="Status:", width=10)
-        self.projects_label = MyLabel(master=self.info_frame, view='extractor', text="List of Projects:", width=10)
-        self.name_label = MyLabel(master=self.info_frame, view='extractor', text="Name:", width=5)
-        self.botname_label = MyLabel(master=self.info_frame, view='extractor', text="Botname:", width=6)
+        # self.last_extractor_user_label = MyLabel(master=self.info_frame, view='extractor', text="Last user(Extractor):", width=15)
+        # self.last_kraken_user_label = MyLabel(master=self.info_frame, view='extractor', text="Last user(Kraken):", width=15)
+        # self.domain_label = MyLabel(master=self.info_frame, view='extractor', text="Domain:", width=10)
+        # self.status_label = MyLabel(master=self.info_frame, view='extractor', text="Status:", width=10)
+        # self.projects_label = MyLabel(master=self.info_frame, view='extractor', text="List of Projects:", width=10)
+        # self.name_label = MyLabel(master=self.info_frame, view='extractor', text="Name:", width=5)
+        # self.botname_label = MyLabel(master=self.info_frame, view='extractor', text="Botname:", width=6)
 
         self.date_order_label = MyLabel(master=self.json_buttons_frame, view='extractor', text="")
-        self.last_extractor_user_var_label = MyLabel(master=self.info_frame, view='extractor', text="", width=25, style='Bold.TLabel')
-        self.last_kraken_user_var_label = MyLabel(master=self.info_frame, view='extractor', text="", width=25, style='Bold.TLabel')
+        # self.last_extractor_user_var_label = MyLabel(master=self.info_frame, view='extractor', text="", width=25, style='Bold.TLabel')
+        # self.last_kraken_user_var_label = MyLabel(master=self.info_frame, view='extractor', text="", width=25, style='Bold.TLabel')
 
-        self.domain_var_label = MyLabel(master=self.info_frame, view='extractor', text="", width=25, style='Bold.TLabel')
-        self.projects_var_label = MyLabel(master=self.info_frame, view='extractor', text="", width=20, style='Bold.TLabel')
-        self.name_var_label = MyLabel(master=self.info_frame, view='extractor', text="", width=10, style='Bold.TLabel')
-        self.botname_var_label = MyLabel(master=self.info_frame, view='extractor', text="", width=10, style='Bold.TLabel')
-        self.status_var_label = MyLabel(master=self.info_frame, view='extractor', text="", width=20, style='Bold.TLabel')
+        # self.domain_var_label = MyLabel(master=self.info_frame, view='extractor', text="", width=25, style='Bold.TLabel')
+        # self.projects_var_label = MyLabel(master=self.info_frame, view='extractor', text="", width=20, style='Bold.TLabel')
+        # self.name_var_label = MyLabel(master=self.info_frame, view='extractor', text="", width=10, style='Bold.TLabel')
+        # self.botname_var_label = MyLabel(master=self.info_frame, view='extractor', text="", width=10, style='Bold.TLabel')
+        # self.status_var_label = MyLabel(master=self.info_frame, view='extractor', text="", width=20, style='Bold.TLabel')
 
-        self.var_labels = [self.date_order_label, self.last_extractor_user_var_label, self.last_kraken_user_var_label, self.domain_var_label,
-                           self.status_var_label, self.projects_var_label, self.name_var_label, self.botname_var_label, self.info_label]
+        # self.var_labels = [self.date_order_label, self.last_extractor_user_var_label, self.last_kraken_user_var_label, self.domain_var_label,
+        #                    self.status_var_label, self.projects_var_label, self.name_var_label, self.botname_var_label, self.info_label]
 
         # Finder Labels
         self.finder_filter_label = MyLabel(master=self.finder_filter_frame, view='finder', text="Multiple Results Filter:", width=25)
@@ -473,10 +473,10 @@ class MainApplication(tk.Tk):
         self.view_menu_frame.frame_list = [
             [self.open_extractor_button, self.open_finder_button, self.info_label, self.sync_button, self.refresh_db_button]
         ]
-        self.info_frame.frame_list = [
-            [self.last_kraken_user_label, self.last_kraken_user_var_label, self.projects_label, self.projects_var_label, self.domain_label, self.domain_var_label],
-            [self.last_extractor_user_label, self.last_extractor_user_var_label, self.status_label, self.status_var_label, self.botname_label, self.botname_var_label, self.name_label, self.name_var_label]
-        ]
+        # self.info_frame.frame_list = [
+        #     [self.last_kraken_user_label, self.last_kraken_user_var_label, self.projects_label, self.projects_var_label, self.domain_label, self.domain_var_label],
+        #     [self.last_extractor_user_label, self.last_extractor_user_var_label, self.status_label, self.status_var_label, self.botname_label, self.botname_var_label, self.name_label, self.name_var_label]
+        # ]
         self.kraken_frame.frame_list = [
             # [self.kraken_id_label],
             [self.kraken_textbox, self.kraken_clipboard_button, self.open_source_button, self.load_from_db_button, self.open_items_button]
@@ -668,7 +668,7 @@ class MainApplication(tk.Tk):
 
     def window_setup(self):
         width = 720
-        height = 768
+        height = 700
         starting_height = 0
         if config.side_of_window == "r":
             starting_width = self.winfo_screenwidth() - width - 6
