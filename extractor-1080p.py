@@ -397,8 +397,9 @@ class MainApplication(tk.Tk):
 
 
         # Bottom Frame MyButtons
-        self.clear_button = MyButton(master=self.bottom_buttons_frame, view='extractor', text="Clear All", command=self.clear, style='Bold.TButton')
-        self.generate_button = MyButton(master=self.bottom_buttons_frame, view='extractor', text="Generate", command=self.generate, style='Bold.TButton')
+        self.clear_button = MyButton(master=self.bottom_buttons_frame, view='extractor', text="Clear All", command=self.clear)
+        self.generate_button = MyButton(master=self.bottom_buttons_frame, view='extractor', text="Generate", command=lambda: self.generate(settings=False))
+        self.generate_settings_button = MyButton(master=self.bottom_buttons_frame, view='extractor', text="Gen settings", command=lambda: self.generate(settings=True))
 
         # Finder Buttons
         self.find_content_button = MyButton(master=self.article_url_frame, view='finder', text="Find", command=self.find_content, padding=0)
@@ -550,7 +551,7 @@ class MainApplication(tk.Tk):
             [self.link_regex_textbox, self.link_regex_buttons_frame]
         ]
         self.bottom_buttons_frame.frame_list = [
-            [self.generate_button, self.clear_button]
+            [self.generate_button, self.generate_settings_button, self.clear_button]
         ]
 
         # Finder Frame Lists
@@ -1229,11 +1230,15 @@ class MainApplication(tk.Tk):
             json_var["scrapy_settings"] = config.settings_json
         return self.sort_json(json_var)
 
-    def fill_code_textbox(self, json_var):
+    def fill_code_textbox(self, json_var, fields=False):
         final_text = json.dumps(json_var, indent=2)
         self.json_textbox.delete("1.0", tk.END)
         self.json_textbox.insert('1.0', final_text)
-        return final_text
+        if fields:
+            data = json.loads(final_text)[fields]
+        else:
+            data = json.loads(final_text)
+        return json.dumps(data, indent=2)
 
     def log_code(self, json_dict):
         if self.kraken_id:
@@ -1283,11 +1288,11 @@ class MainApplication(tk.Tk):
         con.commit()
         con.close()
 
-    def generate(self, _=None, initial_json=None, load_from_existing_bool=False, leave_current_url=False):
+    def generate(self, _=None, initial_json=None, load_from_existing_bool=False, leave_current_url=False, settings=False):
         existing_code = self.get_strip(self.json_textbox)
         if initial_json:
             json_variable = self.default_changes(initial_json)
-            self.fill_code_textbox(json_variable)
+            self.fill_code_textbox(json_variable, False)
             self.update_date_order_label()
             for element in self.xpath_dict.keys():
                 self.edit_textbox(self.xpath_dict[element], element, json_variable)
@@ -1305,9 +1310,13 @@ class MainApplication(tk.Tk):
                 for element in self.xpath_dict.keys():
                     json_variable = self.get_text_from_textbox(self.xpath_dict[element], element, json_variable)
             json_variable = self.default_changes(json_variable)
-            final_json = self.fill_code_textbox(json_variable)
+            final_json = self.fill_code_textbox(json_variable, False)
             self.update_date_order_label()
-            pyperclip.copy(final_json)
+            final_scrapy_arguments = json.loads(final_json)
+            if not settings:
+                pyperclip.copy(self.fill_code_textbox(final_scrapy_arguments, "scrapy_arguments"))
+            else:
+                pyperclip.copy(self.fill_code_textbox(final_scrapy_arguments, "scrapy_settings"))
             for element in self.xpath_dict.keys():
                 self.edit_textbox(self.xpath_dict[element], element, json_variable)
 
@@ -1330,13 +1339,13 @@ class MainApplication(tk.Tk):
                     json_variable = self.get_text_from_textbox(self.xpath_dict[element], element, json_variable)
 
                 json_variable = self.default_changes(json_variable)
-                final_json = self.fill_code_textbox(json_variable)
+                final_json = self.fill_code_textbox(json_variable, False)
                 self.update_date_order_label()
                 pyperclip.copy(final_json)
                 self.log_code(json_variable)
                 self.info_label['text'] = "JSON copied."
             else:
-                self.fill_code_textbox(json_variable)
+                self.fill_code_textbox(json_variable, False)
 
     def fill_found_textboxes(self, tree, column):
         con = sqlite3.connect(config.local_db_path)
