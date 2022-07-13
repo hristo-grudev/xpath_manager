@@ -1350,8 +1350,12 @@ class MainApplication(tk.Tk):
 
                 json_variable = self.default_changes(json_variable)
                 final_json = self.fill_code_textbox(json_variable, False)
+                final_scrapy_arguments = json.loads(final_json)
                 self.update_date_order_label()
-                pyperclip.copy(final_json)
+                if not settings:
+                    pyperclip.copy(self.fill_code_textbox(final_scrapy_arguments, "scrapy_arguments"))
+                else:
+                    pyperclip.copy(self.fill_code_textbox(final_scrapy_arguments, "scrapy_settings"))
                 self.log_code(json_variable)
                 self.info_label['text'] = "JSON copied."
             else:
