@@ -60,7 +60,7 @@ class MainApplication(tk.Tk):
         self.text_font = Font(family=config.label_font, size=10)
 
         # Extractor Frames (Order chosen here)
-        self.view_menu_frame = MyFrame(master=self, padding=5, view='menu')
+        self.view_menu_frame = MyFrame(master=self, padding=4, view='menu')
         self.info_frame = MyFrame(master=self, view='extractor')
         self.kraken_frame = MyFrame(master=self, view='extractor')
         self.json_full_frame = MyFrame(master=self, view='extractor')
@@ -81,6 +81,7 @@ class MainApplication(tk.Tk):
         self.link_regex_frame = MyFrame(master=self, view='extractor')
         self.link_regex_buttons_frame = MyFrame(self.link_regex_frame, view='extractor')
         self.bottom_buttons_frame = MyFrame(master=self, view='extractor')
+        self.bottom_gen_buttons_frame = MyFrame(self.bottom_buttons_frame, view='extractor')
 
         # Finder Frames (Order chosen here)
         self.finder_filter_frame = MyFrame(master=self, view='finder', padding=10)
@@ -398,7 +399,7 @@ class MainApplication(tk.Tk):
 
         # Bottom Frame MyButtons
         self.clear_button = MyButton(master=self.bottom_buttons_frame, view='extractor', text="Clear All", command=self.clear)
-        self.generate_button = MyButton(master=self.bottom_buttons_frame, view='extractor', text="Generate", command=lambda: self.generate(settings=False))
+        self.generate_button = MyButton(master=self.bottom_gen_buttons_frame, view='extractor', text="Generate", command=lambda: self.generate(settings=False))
         self.generate_settings_button = MyButton(master=self.bottom_buttons_frame, view='extractor', text="Gen settings", command=lambda: self.generate(settings=True))
 
         # Finder Buttons
@@ -550,8 +551,11 @@ class MainApplication(tk.Tk):
             [self.link_regex_label],
             [self.link_regex_textbox, self.link_regex_buttons_frame]
         ]
+        self.bottom_gen_buttons_frame.frame_list = [
+            [self.generate_button]
+        ]
         self.bottom_buttons_frame.frame_list = [
-            [self.generate_button, self.generate_settings_button, self.clear_button]
+            [self.bottom_gen_buttons_frame, self.generate_settings_button, self.clear_button]
         ]
 
         # Finder Frame Lists

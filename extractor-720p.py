@@ -54,7 +54,8 @@ class MainApplication(tk.Tk):
         self.checkbutton_style.configure('TCheckbutton', background=config.background)
         self.label_style.configure('TLabel', background=config.background, font=(config.label_font, 6))
         self.label_style.configure('TRadiobutton', background=config.background, font=(config.label_font, 7))
-        self.label_style_bold.configure('Bold.TLabel', background=config.background, font=(config.label_font, 6, 'bold'))
+        self.label_style_bold.configure('Bold.TLabel', background=config.background,
+                                        font=(config.label_font, 6, 'bold'))
         self.button_style.configure('TButton', font=(config.button_font, 6), width=10)
         self.button_style_bold.configure('Bold.TButton', font=(config.button_font, 6, 'bold'), width=10)
         self.text_font = Font(family=config.label_font, size=7)
@@ -81,6 +82,7 @@ class MainApplication(tk.Tk):
         self.link_regex_frame = MyFrame(master=self, view='extractor')
         self.link_regex_buttons_frame = MyFrame(self.link_regex_frame, view='extractor')
         self.bottom_buttons_frame = MyFrame(master=self, view='extractor')
+        self.bottom_gen_buttons_frame = MyFrame(self.bottom_buttons_frame, view='extractor')
 
         # Finder Frames (Order chosen here)
         self.finder_filter_frame = MyFrame(master=self, view='finder', padding=5)
@@ -94,10 +96,11 @@ class MainApplication(tk.Tk):
         self.finder_junk_frame = MyFrame(master=self, view='finder', padding=5)
 
         # Menu Labels
-        self.info_label = MyLabel(master=self.view_menu_frame, view='menu', text="", width=70, justify=tk.CENTER, style='Bold.TLabel', anchor='center')
+        self.info_label = MyLabel(master=self.view_menu_frame, view='menu', text="", width=70, justify=tk.CENTER,
+                                  style='Bold.TLabel', anchor='center')
 
         # Extractor Labels
-        self.kraken_id_label = MyLabel(master=self.kraken_frame, view='extractor', text="Kraken Link/ID:")
+        #self.kraken_id_label = MyLabel(master=self.kraken_frame, view='extractor', text="Kraken Link/ID:")
         self.json_label = MyLabel(master=self.json_full_frame, view='extractor', text="JSON:")
         self.start_urls_label = MyLabel(master=self.start_urls_frame, view='extractor', text="Start URLs:")
         self.menu_label = MyLabel(master=self.menu_frame, view='extractor', text="Menu XPath:")
@@ -130,14 +133,18 @@ class MainApplication(tk.Tk):
         #                    self.status_var_label, self.projects_var_label, self.name_var_label, self.botname_var_label, self.info_label]
 
         # Finder Labels
-        self.finder_filter_label = MyLabel(master=self.finder_filter_frame, view='finder', text="Multiple Results Filter:", width=25)
+        self.finder_filter_label = MyLabel(master=self.finder_filter_frame, view='finder',
+                                           text="Multiple Results Filter:", width=25)
         self.finder_article_label = MyLabel(master=self.article_url_frame, view='finder', text="URL:", width=15)
         self.finder_title_label = MyLabel(master=self.finder_title_frame, view='finder', text="Title XPath:", width=15)
-        self.finder_pubdate_label = MyLabel(master=self.finder_pubdate_frame, view='finder', text="Pubdate XPath:", width=15)
-        self.finder_author_label = MyLabel(master=self.finder_author_frame, view='finder', text="Author XPath:", width=15)
+        self.finder_pubdate_label = MyLabel(master=self.finder_pubdate_frame, view='finder', text="Pubdate XPath:",
+                                            width=15)
+        self.finder_author_label = MyLabel(master=self.finder_author_frame, view='finder', text="Author XPath:",
+                                           width=15)
         self.finder_body_label = MyLabel(master=self.finder_body_frame, view='finder', text="Body XPath:", width=15)
         self.finder_image_label = MyLabel(master=self.finder_image_frame, view='finder', text="Image XPath:", width=15)
-        self.junk_body_label = MyLabel(master=self.junk_xpath_body_frame, view='finder', text="Body to clean:", width=15)
+        self.junk_body_label = MyLabel(master=self.junk_xpath_body_frame, view='finder', text="Body to clean:",
+                                       width=15)
         self.junk_body_elements_label = MyLabel(master=self.junk_xpath_body_frame, view='finder', text="", width=25)
         self.finder_junk_label = MyLabel(master=self.finder_junk_frame, view='finder', text="Junk found:", width=15)
 
@@ -395,14 +402,14 @@ class MainApplication(tk.Tk):
         self.link_regex_exclude_button = MyButton(master=self.link_regex_buttons_frame, view='extractor', text="Rgx Exclude",
                                           command=lambda: self.replace_textbox_value(self.link_regex_textbox, f"^(?P<id>https?:\/\/{self.get_domain().split('/')[2]}\/(?!en)[^?#]+)"))
 
-
         # Bottom Frame MyButtons
-        self.clear_button = MyButton(master=self.bottom_buttons_frame, view='extractor', text="Clear All", command=self.clear, style='Bold.TButton')
-        self.generate_button = MyButton(master=self.bottom_buttons_frame, view='extractor', text="Generate", command=self.generate, style='Bold.TButton')
+        self.clear_button = MyButton(master=self.bottom_buttons_frame, view='extractor', text="Clear All", command=self.clear)
+        self.generate_button = MyButton(master=self.bottom_gen_buttons_frame, view='extractor', text="Generate", command=lambda: self.generate(settings=False))
+        self.generate_settings_button = MyButton(master=self.bottom_buttons_frame, view='extractor', text="Gen settings", command=lambda: self.generate(settings=True))
 
         # Finder Buttons
         self.find_content_button = MyButton(master=self.article_url_frame, view='finder', text="Find", command=self.find_content, padding=0)
-        self.find_junk_button = MyButton(master=self.junk_xpath_body_frame, view='finder', text="Find", command=self.find_junk, style="Bold.TButton", padding=3)
+        self.find_junk_button = MyButton(master=self.junk_xpath_body_frame, view='finder', text="Find", command=self.find_junk, style="Bold.TButton", padding=5)
         self.add_node_button = MyButton(master=self.junk_xpath_body_frame, view='finder', text="/node()", command=lambda: self.append_textbox_values(
             textbox=self.finder_junk_textbox,
             after_value='/node()'))
@@ -474,16 +481,19 @@ class MainApplication(tk.Tk):
             [self.open_extractor_button, self.open_finder_button, self.info_label, self.sync_button, self.refresh_db_button]
         ]
         # self.info_frame.frame_list = [
-        #     [self.last_kraken_user_label, self.last_kraken_user_var_label, self.projects_label, self.projects_var_label, self.domain_label, self.domain_var_label],
-        #     [self.last_extractor_user_label, self.last_extractor_user_var_label, self.status_label, self.status_var_label, self.botname_label, self.botname_var_label, self.name_label, self.name_var_label]
+        #     [self.last_kraken_user_label, self.last_kraken_user_var_label, self.projects_label, self.projects_var_label],
+        #     [self.last_extractor_user_label, self.last_extractor_user_var_label, self.status_label, self.status_var_label, self.botname_label, self.botname_var_label],
+        #     [self.domain_label, self.domain_var_label, self.name_label, self.name_var_label]
         # ]
         self.kraken_frame.frame_list = [
             # [self.kraken_id_label],
             [self.kraken_textbox, self.kraken_clipboard_button, self.open_source_button, self.load_from_db_button, self.open_items_button]
         ]
         self.json_buttons_frame.frame_list = [
-            [self.code_copy_button, self.load_from_existing_button, self.load_without_url_button, self.add_proxy_button, self.allowed_domains_button, self.pubdate_required_button],
-            [self.init_wait_button, self.article_wait_button, self.date_order_DMY, self.date_order_MDY, self.date_order_YMD, self.date_order_label]
+            [self.code_copy_button, self.load_from_existing_button, self.load_without_url_button, self.add_proxy_button,
+             self.allowed_domains_button, self.pubdate_required_button],
+            [self.init_wait_button, self.article_wait_button, self.date_order_DMY, self.date_order_MDY,
+             self.date_order_YMD, self.date_order_label]
         ]
         self.json_checkbutton_frame.frame_list = [
             [self.open_source_checkbutton, self.overwrite_domain_checkbutton, self.rdc_checkbutton]
@@ -526,7 +536,8 @@ class MainApplication(tk.Tk):
         ]
         self.body_buttons_frame.frame_list = [
             [self.copy_body_button, self.body_not_contains_class_button, self.body_not_contains_desc_class_button,
-             self.body_not_contains_id_button, self.body_not_contains_text_button, self.body_not_self_button, self.body_single_button]
+             self.body_not_contains_id_button, self.body_not_contains_text_button, self.body_not_self_button,
+             self.body_single_button]
         ]
         self.body_frame.frame_list = [
             [self.body_label],
@@ -546,8 +557,11 @@ class MainApplication(tk.Tk):
             [self.link_regex_label],
             [self.link_regex_textbox, self.link_regex_buttons_frame]
         ]
+        self.bottom_gen_buttons_frame.frame_list = [
+            [self.generate_button]
+        ]
         self.bottom_buttons_frame.frame_list = [
-            [self.generate_button, self.clear_button]
+            [self.bottom_gen_buttons_frame, self.generate_settings_button, self.clear_button]
         ]
 
         # Finder Frame Lists
@@ -661,7 +675,7 @@ class MainApplication(tk.Tk):
                 else:
                     self.pack_frame(widget.frame_list)
                 if widget in self.winfo_children():
-                    widget.grid(row=row, column=0, sticky='W', padx=10, pady=0)
+                    widget.grid(row=row, column=0, sticky='W', padx=20, pady=0)
                     row += 1
             if hasattr(widget, 'view') and widget.view != 'extractor' and widget.view != 'menu':
                 widget.grid_remove()
@@ -885,8 +899,8 @@ class MainApplication(tk.Tk):
         cur.execute('SELECT date, user FROM log WHERE id=?', (self.kraken_id,))
         result = cur.fetchone()
         con.close()
-        if result:
-            self.last_extractor_user_var_label['text'] = f"{result[1]}({result[0][:-3]})"
+        # if result:
+        #     self.last_extractor_user_var_label['text'] = f"{result[1]}({result[0][:-3]})"
 
         items_link = link.replace('/edit', '')
         last_editor_xpath = '//tr[td[child::text()[contains(.,"Updated by")]]]/td[2]//text()'
@@ -921,12 +935,12 @@ class MainApplication(tk.Tk):
                 status = "Custom"
             else:
                 status = "Stopped"
-        self.last_kraken_user_var_label['text'] = f"{last_editor}({last_update})"
-        self.status_var_label['text'] = status
-        self.projects_var_label['text'] = ','.join(projects)
-        self.botname_var_label['text'] = botname
-        self.name_var_label['text'] = name
-        self.domain_var_label['text'] = domain
+        # self.last_kraken_user_var_label['text'] = f"{last_editor}({last_update})"
+        # self.status_var_label['text'] = status
+        # self.projects_var_label['text'] = ','.join(projects)
+        # self.botname_var_label['text'] = botname
+        # self.name_var_label['text'] = name
+        # self.domain_var_label['text'] = domain
         xpath = "//input[@name='feed_properties']/@value"
         link = link.strip()
         kraken_response = self.session.get(link)
@@ -977,7 +991,7 @@ class MainApplication(tk.Tk):
 
         if result:
             self.set_kraken_id(result[0])
-            self.last_extractor_user_var_label['text'] = f"{result[-1]}({result[1]})"
+            # self.last_extractor_user_var_label['text'] = f"{result[-1]}({result[1]})"
             settings = result[10].replace("'", '"').replace("False", '"False"').replace("True",
                                                                                         '"True"')  # Format Bool Values to not crash JSON
             # Create a new var and load database values into it
@@ -998,11 +1012,11 @@ class MainApplication(tk.Tk):
                 json_var['scrapy_arguments']['author_xpath'] = result[8]
             if result[9]:
                 json_var['scrapy_arguments']['body_xpath'] = result[9]
-            self.domain_var_label['text'] = result[11]
-            self.name_var_label['text'] = result[12]
-            self.status_var_label['text'] = result[13]
-            self.projects_var_label['text'] = result[14]
-            self.botname_var_label['text'] = result[15]
+            # self.domain_var_label['text'] = result[11]
+            # self.name_var_label['text'] = result[12]
+            # self.status_var_label['text'] = result[13]
+            # self.projects_var_label['text'] = result[14]
+            # self.botname_var_label['text'] = result[15]
             self.generate(initial_json=json_var)
         else:
             self.clear()  # Clear all textboxes to indicate entry doesn't exist
@@ -1152,8 +1166,8 @@ class MainApplication(tk.Tk):
         for widget in clearing_set:
             if isinstance(widget, MyText) and widget not in skip:
                 widget.delete("1.0", tk.END)
-        for label in self.var_labels:
-            label['text'] = ''
+        # for label in self.var_labels:
+        #     label['text'] = ''
 
     @staticmethod
     def sort_json(json_object):
@@ -1226,11 +1240,15 @@ class MainApplication(tk.Tk):
             json_var["scrapy_settings"] = config.settings_json
         return self.sort_json(json_var)
 
-    def fill_code_textbox(self, json_var):
+    def fill_code_textbox(self, json_var, fields=False):
         final_text = json.dumps(json_var, indent=2)
         self.json_textbox.delete("1.0", tk.END)
         self.json_textbox.insert('1.0', final_text)
-        return final_text
+        if fields:
+            data = json.loads(final_text)[fields]
+        else:
+            data = json.loads(final_text)
+        return json.dumps(data, indent=2)
 
     def log_code(self, json_dict):
         if self.kraken_id:
@@ -1257,11 +1275,11 @@ class MainApplication(tk.Tk):
         date_order = json_var['scrapy_arguments']['date_order'] if 'date_order' in json_var['scrapy_arguments'].keys() else ""
         author_xpath = json_var['scrapy_arguments']['author_xpath'] if 'author_xpath' in json_var['scrapy_arguments'].keys() else ""
         body_xpath = json_var['scrapy_arguments']['body_xpath'] if 'body_xpath' in json_var['scrapy_arguments'].keys() else ""
-        domain = self.domain_var_label['text']
-        name = self.name_var_label['text']
-        status = self.status_var_label['text']
-        projects = self.projects_var_label['text']
-        botname = self.botname_var_label['text']
+        domain = None
+        name = user
+        status = None
+        projects = None
+        botname = None
 
         cur.execute("SELECT id FROM log WHERE id=?", (self.kraken_id,))
         if len(cur.fetchall()):
@@ -1280,15 +1298,15 @@ class MainApplication(tk.Tk):
         con.commit()
         con.close()
 
-    def generate(self, _=None, initial_json=None, load_from_existing_bool=False, leave_current_url=False):
+    def generate(self, _=None, initial_json=None, load_from_existing_bool=False, leave_current_url=False, settings=False):
         existing_code = self.get_strip(self.json_textbox)
         if initial_json:
             json_variable = self.default_changes(initial_json)
-            self.fill_code_textbox(json_variable)
+            self.fill_code_textbox(json_variable, False)
             self.update_date_order_label()
             for element in self.xpath_dict.keys():
                 self.edit_textbox(self.xpath_dict[element], element, json_variable)
-            self.color_info_labels()
+            # self.color_info_labels()
 
         elif existing_code:
             try:
@@ -1302,13 +1320,17 @@ class MainApplication(tk.Tk):
                 for element in self.xpath_dict.keys():
                     json_variable = self.get_text_from_textbox(self.xpath_dict[element], element, json_variable)
             json_variable = self.default_changes(json_variable)
-            final_json = self.fill_code_textbox(json_variable)
+            final_json = self.fill_code_textbox(json_variable, False)
             self.update_date_order_label()
-            pyperclip.copy(final_json)
+            final_scrapy_arguments = json.loads(final_json)
+            if not settings:
+                pyperclip.copy(self.fill_code_textbox(final_scrapy_arguments, "scrapy_arguments"))
+            else:
+                pyperclip.copy(self.fill_code_textbox(final_scrapy_arguments, "scrapy_settings"))
             for element in self.xpath_dict.keys():
                 self.edit_textbox(self.xpath_dict[element], element, json_variable)
 
-            self.color_info_labels()
+            # self.color_info_labels()
             self.log_code(json_variable)
             self.info_label['text'] = "JSON copied."
 
@@ -1327,13 +1349,13 @@ class MainApplication(tk.Tk):
                     json_variable = self.get_text_from_textbox(self.xpath_dict[element], element, json_variable)
 
                 json_variable = self.default_changes(json_variable)
-                final_json = self.fill_code_textbox(json_variable)
+                final_json = self.fill_code_textbox(json_variable, False)
                 self.update_date_order_label()
                 pyperclip.copy(final_json)
                 self.log_code(json_variable)
                 self.info_label['text'] = "JSON copied."
             else:
-                self.fill_code_textbox(json_variable)
+                self.fill_code_textbox(json_variable, False)
 
     def fill_found_textboxes(self, tree, column):
         con = sqlite3.connect(config.local_db_path)
